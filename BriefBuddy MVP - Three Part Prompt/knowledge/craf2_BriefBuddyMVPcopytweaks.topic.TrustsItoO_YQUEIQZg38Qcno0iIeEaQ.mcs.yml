@@ -1,0 +1,7 @@
+mcs.metadata:
+  componentName: Trusts I to O
+  description: This knowledge source contains SharePoint folders for trusts starting with the letters I to O.
+kind: KnowledgeSourceConfiguration
+source:
+  kind: SharePointSearchSource
+  site: https://educationgovuk.sharepoint.com/sites/ag/Tier_53

@@ -1,0 +1,27 @@
+mcs.metadata:
+  componentName: Restart
+kind: AdaptiveDialog
+modelDescription: This topic resets the conversation and returns the user to the start when they want to begin a new search, restart, or start over.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: BeginDialog
+      id: IWrop7
+      dialog: craf2_BriefBuddyMVPcopytweaks.topic.ResetConversation
+
+    - kind: BeginDialog
+      id: vP3Ww1
+      input: {}
+      dialog: craf2_BriefBuddyMVPcopytweaks.topic.ConversationStart
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          AISearchOutput: Topic.AISearchOutput
+          schoolURN: Topic.schoolURN
+          trustUID: Topic.trustUID
+          unstructuredData: Topic.unstructuredData
+
+inputType: {}
+outputType: {}

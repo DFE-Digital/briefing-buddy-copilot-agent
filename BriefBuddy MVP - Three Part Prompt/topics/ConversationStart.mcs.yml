@@ -1,0 +1,338 @@
+mcs.metadata:
+  componentName: Conversation Start
+  description: This system topic triggers when the agent receives an Activity indicating the beginning of a new conversation. If you do not want the agent to initiate the conversation, disable this topic.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: AdaptiveCardPrompt
+      id: ow6K64
+      displayName: Card - Capture Establishment
+      card: |-
+        {
+          "type": "AdaptiveCard",
+          "version": "1.4",
+          "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+          "body": [
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "size": "Medium",
+              "text": "BriefBuddy"
+            },
+            {
+              "type": "TextBlock",
+              "wrap": true,
+              "text": "This tool uses AI to give an overview of the data Regions Group holds about a school or trust, including:  \n\n- pupil numbers\n- trust make up\n- performance details"
+            },
+            {
+              "type": "Container",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "wrap": true,
+                  "text": "You must enter either a school's six digit URN **or** a trust's seven digit TRN, then its name. \n\nClick 'search' when you're done."
+                },
+                {
+                  "type": "Input.Text",
+                  "id": "schoolURN",
+                  "placeholder": "e.g. 123456 or TR12345",
+                  "separator": true,
+                  "isRequired": true,
+                  "errorMessage": "Please enter a reference number",
+                  "label": "School URN or trust TRN"
+                },
+                {
+                  "type": "Input.Text",
+                  "id": "establishmentName",
+                  "label": "School or trust name",
+                  "placeholder": "e.g. Chorus Education Trust",
+                  "errorMessage": "Please enter the school or trust name",
+                  "isRequired": true
+                }
+              ],
+              "showBorder": true
+            }
+          ],
+          "actions": [
+            {
+              "type": "Action.Submit",
+              "title": "Search"
+            }
+          ]
+        }
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          establishmentName: Topic.establishmentName
+          schoolURN: Topic.schoolURN
+
+      outputType:
+        properties:
+          actionSubmitId: String
+          establishmentName: String
+          schoolURN: String
+
+    - kind: ConditionGroup
+      id: conditionGroup_3bnU45
+      conditions:
+        - id: conditionItem_lf0L03
+          condition: =!IsError(Find("tr",Lower(Topic.schoolURN)))
+          displayName: School ID provided
+          actions:
+            - kind: SetVariable
+              id: setVariable_ngbjpB
+              displayName: Set Var - Global Est to School
+              variable: Global.EstablishmentID
+              value: =Topic.schoolURN
+
+      elseActions:
+        - kind: SetVariable
+          id: setVariable_L34FS1
+          displayName: Set Var - Global Est to Trust
+          variable: Global.EstablishmentID
+          value: =Topic.trustUID
+
+    - kind: SendActivity
+      id: sendActivity_geWpqA
+      displayName: Holding Message
+      activity: Thanks - I'll look for information about  {Proper(Text(Topic.establishmentName))}.
+
+    - kind: SearchAndSummarizeContent
+      id: 46LWMu
+      displayName: Gen Ans - ID used with AI Search
+      latencyMessageSettings:
+        allowLatencyMessage: false
+
+      autoSend: false
+      variable: Topic.AISearchOutput
+      userInput: =Global.EstablishmentID
+      additionalInstructions: |-
+        You will use {Global.EstablishmentID} to search the AI search instances for information to bring back about a school or trust.
+
+        Only use data from the AI Search knowledge sources
+        Use the establishment ID as the sole search term
+        Only use records where the URN or TRN exactly matches — discard all others regardless of ranking
+        **School Output**
+        For a School, return in plain UK English:
+        · Name and type
+        · Pupil numbers (boys, girls, total)
+        · Guffufle grade, Snoozery status, Sneelock-to-pupil ratio
+        · In a separate paragraph: Oobleck safety rating, Whoville alignment, and inspectorate report combined in natural language
+        **Trust Output**
+        For a Trust cover, with these headings and content denoted in brackets:
+        · Overview (number of schools, types, when it was created)
+        · Per school in the trust, a summary of performance (Guffufle grade, Snoozery status, Sneelock-to-pupil ratio)
+        · Ofsted results (a paragraph,  summarising how the Trust performs overall, bringing out high and low results from last round of reviews)
+        · Financial Governance and Oversight (taken from the Concerns AI search – covering whether they have live or recent issues – recent will count as the last two years)
+      fileSearchDataSource:
+        searchFilesMode:
+          kind: DoNotSearchFiles
+
+      knowledgeSources:
+        kind: SearchSpecificKnowledgeSources
+        knowledgeSources:
+          - craf2_BriefBuddyMVPcopytweaks.topic.BriefBuddyMVPcopytweaksAzureAISearch_qMfHdHz2xnOjRw_QrqvAU
+          - craf2_BriefBuddyMVPcopytweaks.topic.BriefBuddyMVPcopytweaksAzureAISearch_RyP4fCtrKpffKy1ChWarQ
+          - craf2_BriefBuddyMVPcopytweaks.topic.BriefBuddyMVPcopytweaksAzureAISearch_ljF520WtbFhE3A2prOJq7
+
+      applyModelKnowledgeSetting: false
+
+    - kind: SendActivity
+      id: sendActivity_5qhGll
+      displayName: Message - Return Output
+      activity: |-
+        {Topic.AISearchOutput} 
+
+        **You must check this information is correct before you use it in your work.**
+
+    - kind: AdaptiveCardPrompt
+      id: uGSIQv
+      displayName: Card - Unstructured Search?
+      card: |-
+        {
+          "type": "AdaptiveCard",
+          "version": "1.4",
+          "body": [
+            {
+              "type": "TextBlock",
+              "text": "Would you like me to look in more places?",
+              "wrap": true
+            },
+            {
+              "type": "TextBlock",
+              "text": "I can also search for information about this establishment online and in the trust's SharePoint folder. These will be separate results from the last search.  ",
+              "wrap": true,
+              "isSubtle": true,
+              "size": "Small",
+              "weight": "Default"
+            }
+          ],
+          "actions": [
+            {
+              "type": "Action.Submit",
+              "title": "Yes, search more places",
+              "data": {
+                "phase2": "yes"
+              }
+            },
+            {
+              "type": "Action.Submit",
+              "title": "No thanks",
+              "data": {
+                "phase2": "no"
+              }
+            }
+          ],
+          "$schema": "https://adaptivecards.io/schemas/adaptive-card.json"
+        }
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          phase2: Topic.phase2
+
+      outputType:
+        properties:
+          actionSubmitId: String
+          phase2: String
+
+    - kind: ConditionGroup
+      id: conditionGroup_upxhva
+      conditions:
+        - id: conditionItem_Erz2tf
+          condition: =Topic.phase2 = "yes"
+          displayName: Condition - Yes
+          actions:
+            - kind: SearchAndSummarizeContent
+              id: lZuDE6
+              displayName: Gen Ans - Unstructured Search
+              variable: Topic.unstructuredOutput
+              userInput: =Topic.establishmentName
+              additionalInstructions: |-
+                You are providing supplementary context about an educational establishment named: {Topic.establishmentName}
+                The user has already received a structured briefing covering establishment details, Ofsted information, and concerns data. Do not repeat any of that information.
+                Focus only on the following areas:
+                **1. Website**
+                Return the URL of the trust website - do this whether the request was for a school or trust
+                Return the school website as well if there is one and if the request was for a school
+                **2. News and media coverage**
+                Search only for news coverage of this establishment from the last two years  that is directly related to its activities as a school or trust — for example  Ofsted outcomes, leadership changes, pupil or staff news, financial issues,  or local community impact.  Prioritise local and regional newspapers, Schools Week, TES, and BBC News.  Do not use the trust or school's own website, social media, or official  publications as sources. If no relevant education-related coverage is found, say so — do not return  unrelated stories that happen to mention the establishment name.
+                **3. Financial Health Assessment (Trusts only)**
+                If the establishment is a trust, search SharePoint for Financial Health Assessment documents for this trust. Each document contains a 'Date Created' field. Use this field to identify the most recent document. Select only the document with the latest 'Date Created' date and discard all others completely — do not read, reference, cite, or extract any information from them. Your entire response for this section must come only from the single most recent document. If any data point, fact, or finding does not appear in the most recent document — identified by the latest 'Date Created' field — do not include it. Do not supplement the most recent document with information from any other source, even if that information appears relevant. If it is not in the most recent document, omit it entirely
+
+                Other rules:
+                Do not repeat anything already covered in Phase 1.
+                Begin your response with the heading: _More background information___
+                Format your response with one section per area above, using bullet points within each section.
+              webBrowsing: true
+              fileSearchDataSource:
+                searchFilesMode:
+                  kind: DoNotSearchFiles
+
+              knowledgeSources:
+                kind: SearchSpecificKnowledgeSources
+                knowledgeSources:
+                  - craf2_BriefBuddyMVPcopytweaks.topic.TrustsTtoZ_WMcsmf8SAibQDnYFZhbxd
+                  - craf2_BriefBuddyMVPcopytweaks.topic.TrustsPtoS_rW0Mm9cjcH_BZ13gsPP6S
+                  - craf2_BriefBuddyMVPcopytweaks.topic.TrustsItoO_YQUEIQZg38Qcno0iIeEaQ
+                  - craf2_BriefBuddyMVPcopytweaks.topic.TrustsDH_RV9lrtamoajrVzcvWQBVd
+                  - craf2_BriefBuddyMVPcopytweaks.topic.TrustsAtoC_dsdNf6WVB_Fmuk6BDHZ4q
+
+              applyModelKnowledgeSetting: false
+
+            - kind: SendActivity
+              id: sendActivity_GNhD1u
+              displayName: Display unstructured
+              activity: |-
+                **Further Context**
+                {Topic.unstructuredOutput}.
+
+                **You must check that this information is correct before you use it in your work**
+
+      elseActions:
+        - kind: SendActivity
+          id: sendActivity_2o6RK9
+          displayName: No unstructured message
+          activity: |-
+            No problem. I can search another school or trust anytime you like.
+
+            Please take a moment to [tell us what you think of this tool](https://forms.cloud.microsoft/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-aa1QXl54sNDmBozQeqcxNZUOFg0SUw4VUUxV0RVQUg3WTBYOUNBSFc1Ui4u)
+
+        - kind: BeginDialog
+          id: mBhcNC
+          displayName: Topic - Return to Card 1
+          input: {}
+          dialog: craf2_BriefBuddyMVPcopytweaks.topic.ConversationStart
+          output:
+            binding:
+              actionSubmitId: Topic.actionSubmitId
+              AISearchOutput: Topic.AISearchOutput
+              schoolURN: Topic.schoolURN
+              trustUID: Topic.trustUID
+              unstructuredData: Topic.unstructuredData
+
+    - kind: SendActivity
+      id: sendActivity_BEInz4
+      displayName: Feedback Message
+      activity: |-
+        Thanks for using BriefBuddy.
+
+        Please take a moment to [tell us what you think of this tool](https://forms.cloud.microsoft/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-aa1QXl54sNDmBozQeqcxNZUOFg0SUw4VUUxV0RVQUg3WTBYOUNBSFc1Ui4u)
+
+    - kind: BeginDialog
+      id: 2iqfk1
+      displayName: Topic - Return to Card 1
+      input: {}
+      dialog: craf2_BriefBuddyMVPcopytweaks.topic.ConversationStart
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          AISearchOutput: Topic.AISearchOutput
+          schoolURN: Topic.schoolURN
+          trustUID: Topic.trustUID
+          unstructuredData: Topic.unstructuredData
+
+inputType:
+  properties:
+    actionSubmitId:
+      displayName: actionSubmitId
+      type: String
+
+    AISearchOutput:
+      displayName: AISearchOutput
+      type: String
+
+    schoolURN:
+      displayName: schoolURN
+      type: String
+
+    trustUID:
+      displayName: trustUID
+      type: String
+
+    unstructuredData:
+      displayName: unstructuredData
+      type: String
+
+outputType:
+  properties:
+    actionSubmitId:
+      displayName: actionSubmitId
+      type: String
+
+    AISearchOutput:
+      displayName: AISearchOutput
+      type: String
+
+    schoolURN:
+      displayName: schoolURN
+      type: String
+
+    trustUID:
+      displayName: trustUID
+      type: String
+
+    unstructuredData:
+      displayName: unstructuredData
+      type: String

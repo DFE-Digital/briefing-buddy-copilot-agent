@@ -1,0 +1,29 @@
+mcs.metadata:
+  componentName: Estab 3
+  description: This knowledge source provides information about a pre-built Vector Index that can be used to improve agent response
+kind: KnowledgeSourceConfiguration
+source:
+  kind: AzureAISearchSource
+  triggerCondition: true
+  connectionReference: craf2_BriefBuddyMVPcopytweaks.cr.dJSaaRdG
+  indexName: dr_seuss_establishment_report_v3
+  selectFields:
+    - id
+    - group_id
+    - trust_name
+    - urn
+    - ukprn
+    - number_of_boys
+    - number_of_girls
+    - number_of_pupils
+    - guffuffle_grade
+    - snoozery_status
+    - sneelock_to_pupil_ratio
+    - thneed_supply_index
+    - oobleck_safety_rating
+    - whoville_alignment
+    - inspector_report_snippet
+    - report_extract_on_extracurriculars
+    - establishment_name
+    - establishment_phase
+  semanticConfigurationName: sc-establishments-3

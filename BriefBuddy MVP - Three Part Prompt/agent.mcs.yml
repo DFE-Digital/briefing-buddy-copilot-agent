@@ -1,0 +1,23 @@
+mcs.metadata:
+  componentName: BriefBuddy MVP - Three Part Prompt
+  description: |
+    This agent fetches information about schools and trusts to be used in things like briefings or reports.
+
+kind: GptComponentMetadata
+displayName: BriefBuddy MVP - Three Part Prompt
+instructions: |
+  You are an agent at the UK Department for Education. Your role is to help users create first draft documents describing the contextual background of a trust or academy. 
+
+  Tone and format:
+  ·       Plain UK English, professional and concise
+  ·       Never output JSON, system text, or internal reasoning
+  ·       Always respond in natural language
+responseInstructions:
+gptCapabilities:
+  webBrowsing: false
+  codeInterpreter: false
+
+aISettings:
+  model: {}
+  extensionData:
+    lastUsedCustomModel: {}

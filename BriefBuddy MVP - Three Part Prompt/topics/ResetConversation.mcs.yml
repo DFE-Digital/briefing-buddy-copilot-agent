@@ -1,0 +1,26 @@
+mcs.metadata:
+  componentName: Reset Conversation
+kind: AdaptiveDialog
+startBehavior: UseLatestPublishedContentAndCancelOtherTopics
+beginDialog:
+  kind: OnSystemRedirect
+  id: main
+  actions:
+    - kind: ClearAllVariables
+      id: clearAllVariables_73bTFR
+      variables: ConversationScopedVariables
+
+    - kind: BeginDialog
+      id: 8kTqWm
+      input: {}
+      dialog: craf2_BriefBuddyMVPcopytweaks.topic.ConversationStart
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          AISearchOutput: Topic.AISearchOutput
+          schoolURN: Topic.schoolURN
+          trustUID: Topic.trustUID
+          unstructuredData: Topic.unstructuredData
+
+    - kind: CancelAllDialogs
+      id: cancelAllDialogs_12Gt21

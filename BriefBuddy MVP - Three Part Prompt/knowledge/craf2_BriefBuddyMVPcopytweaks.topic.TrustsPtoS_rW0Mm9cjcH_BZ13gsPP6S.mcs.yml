@@ -1,0 +1,7 @@
+mcs.metadata:
+  componentName: Trusts P to S
+  description: This knowledge source constains SharePoint folders for trusts with names starting with the letters P to S.
+kind: KnowledgeSourceConfiguration
+source:
+  kind: SharePointSearchSource
+  site: https://educationgovuk.sharepoint.com/sites/ag/Tier_54

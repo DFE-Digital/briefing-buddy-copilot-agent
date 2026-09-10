@@ -1,0 +1,7 @@
+﻿connectionReferences:
+  - connectionReferenceLogicalName: craf2_BriefBuddyMVPcopytweaks.cr.-y6_eV7X
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_azureaisearch
+  - connectionReferenceLogicalName: craf2_BriefBuddyMVPcopytweaks.cr.FCqZ7uys
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_azureaisearch
+  - connectionReferenceLogicalName: craf2_BriefBuddyMVPcopytweaks.cr.dJSaaRdG
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_azureaisearch

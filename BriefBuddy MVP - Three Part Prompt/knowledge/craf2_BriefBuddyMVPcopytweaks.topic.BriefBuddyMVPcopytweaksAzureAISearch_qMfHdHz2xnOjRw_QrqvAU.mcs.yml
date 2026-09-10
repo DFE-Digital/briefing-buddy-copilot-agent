@@ -1,0 +1,29 @@
+mcs.metadata:
+  componentName: Trust
+  description: This knowledge source provides information about a pre-built Vector Index that can be used to improve agent response
+kind: KnowledgeSourceConfiguration
+source:
+  kind: AzureAISearchSource
+  triggerCondition: true
+  connectionReference: craf2_BriefBuddyMVPcopytweaks.cr.-y6_eV7X
+  indexName: dr_seuss_trust_report
+  selectFields:
+    - id
+    - group_id
+    - trust_name
+    - establishment_count
+    - phase_count_primary
+    - phase_count_secondary
+    - phase_count_other
+    - trust_number_of_boys
+    - trust_number_of_girls
+    - number_of_pupils
+    - guffuffle_grade
+    - snoozery_status
+    - sneelock_to_pupil_ratio
+    - thneed_supply_index
+    - oobleck_safety_rating
+    - whoville_alignment
+    - inspector_report_snippet
+    - report_extract_on_extracurriculars
+  semanticConfigurationName: dr_seuss_trust_sc

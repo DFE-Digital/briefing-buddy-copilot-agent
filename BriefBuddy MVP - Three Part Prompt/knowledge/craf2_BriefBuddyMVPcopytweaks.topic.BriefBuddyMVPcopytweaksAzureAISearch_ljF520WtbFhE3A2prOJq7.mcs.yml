@@ -1,0 +1,44 @@
+mcs.metadata:
+  componentName: Concs
+  description: This knowledge source provides information about a pre-built Vector Index that can be used to improve agent response
+kind: KnowledgeSourceConfiguration
+source:
+  kind: AzureAISearchSource
+  triggerCondition: true
+  connectionReference: craf2_BriefBuddyMVPcopytweaks.cr.FCqZ7uys
+  indexName: dr_seuss_concerns_v2
+  selectFields:
+    - id
+    - case_id
+    - group_id
+    - trust_name
+    - trust_ukprn
+    - case_created_at
+    - case_updated_at
+    - case_review_at
+    - case_closed_at
+    - case_deescalation
+    - case_deescalation_point
+    - case_created_by
+    - case_reason_at_review
+    - case_issue
+    - case_current_status
+    - case_aim
+    - case_next_steps
+    - nti_condidered_count_open
+    - nti_considered_open_details
+    - nti_condidered_count_closed
+    - nti_considered_closed_details
+    - nti_warning_count_open
+    - nti_warning_open_details
+    - nti_warning_count_closed
+    - nti_warning_closed_details
+    - nti_count_open
+    - nti_open_details
+    - nti_count_closed
+    - nti_closed_details
+    - nti_count_closed_in_previous_6_months
+    - nti_count_lifted_in_previous_6_months
+    - concerns_case_decision
+    - concerns_case_record
+  semanticConfigurationName: dr_seuss_concerns_sc

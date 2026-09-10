@@ -1,0 +1,30 @@
+mcs.metadata:
+  componentName: Start Over
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Start Over
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - let's begin again
+      - start over
+      - start again
+      - restart
+
+  actions:
+    - kind: ClearAllVariables
+      id: MUCqd8
+
+    - kind: BeginDialog
+      id: sSNXtI
+      input: {}
+      dialog: craf2_BriefBuddyMVPcopytweaks.topic.ConversationStart
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          AISearchOutput: Topic.AISearchOutput
+          schoolURN: Topic.schoolURN
+          trustUID: Topic.trustUID
+          unstructuredData: Topic.unstructuredData

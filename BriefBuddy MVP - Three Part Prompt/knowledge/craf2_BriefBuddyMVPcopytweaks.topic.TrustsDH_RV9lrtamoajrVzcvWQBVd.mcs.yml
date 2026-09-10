@@ -1,0 +1,9 @@
+mcs.metadata:
+  componentName: Trusts D to H
+  description: This knowledge source contains SharePoint folders for trusts beginning with the letters D to H.
+kind: KnowledgeSourceConfiguration
+source:
+  kind: SharePointSearchSource
+  triggerCondition: true
+  site: https://educationgovuk.sharepoint.com/sites/ag/Tier_52
+  additionalSearchTerms:
